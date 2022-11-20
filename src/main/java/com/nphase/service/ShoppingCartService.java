@@ -14,4 +14,17 @@ public class ShoppingCartService {
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }
+
+    public BigDecimal calculateTotalPriceSameProductDiscount
+            (ShoppingCart shoppingCart, int minQuantity, double discountPercent) {
+        return shoppingCart.getProducts()
+                .stream()
+                .map(product ->
+                        (product.getQuantity() > minQuantity ?
+                                product.getPricePerUnit().multiply(BigDecimal.valueOf(1 - discountPercent / 100)) :
+                                product.getPricePerUnit())
+                                .multiply(BigDecimal.valueOf(product.getQuantity())))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
 }
